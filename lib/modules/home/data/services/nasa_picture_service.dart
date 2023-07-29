@@ -6,9 +6,9 @@ mixin NasaPictureService {
   Future<Either<Exception, NasaPictureEntity>> getData();
 }
 
-class TermsOfUseServiceImpl implements NasaPictureService {
+class NasaPictureServiceImpl implements NasaPictureService {
   final NasaPictureDataSource dataSource;
-  TermsOfUseServiceImpl(this.dataSource);
+  NasaPictureServiceImpl(this.dataSource);
 
   @override
   Future<Either<Exception, NasaPictureEntity>> getData() async {
