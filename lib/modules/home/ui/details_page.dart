@@ -5,17 +5,60 @@ class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key, required this.entity});
 
   final NasaPictureEntity entity;
-
   @override
   Widget build(BuildContext context) {
+    const double borderRadius = 10.0;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Nasa Pictures'), centerTitle: true),
-      body: ListView(children: [
-        Image.network(
-          entity.url ?? '',
-          fit: BoxFit.cover,
-        ),
-      ]),
-    );
+        appBar: AppBar(title: const Text('Detalhes'), centerTitle: true),
+        body: ListView(
+          padding: const EdgeInsets.all(12),
+          children: [
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+              ),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(borderRadius),
+                        topRight: Radius.circular(borderRadius)),
+                    child: Image.network(
+                      entity.url ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          entity.title ?? '',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          entity.date ?? '',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Text(entity.explanation ?? ''),
+            ),
+          ],
+        ));
   }
 }

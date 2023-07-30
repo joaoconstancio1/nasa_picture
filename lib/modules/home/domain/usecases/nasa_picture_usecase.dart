@@ -3,7 +3,7 @@ import 'package:nasa_picture/modules/home/data/services/nasa_picture_service.dar
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 
 abstract class NasaPictureUsecase {
-  Future<Either<Exception, NasaPictureEntity>> call();
+  Future<Either<Exception, List<NasaPictureEntity>>> call();
 }
 
 class NasaPictureUsecaseImp implements NasaPictureUsecase {
@@ -12,7 +12,7 @@ class NasaPictureUsecaseImp implements NasaPictureUsecase {
   NasaPictureUsecaseImp(this.service);
 
   @override
-  Future<Either<Exception, NasaPictureEntity>> call() async {
+  Future<Either<Exception, List<NasaPictureEntity>>> call() async {
     return await service.getData();
   }
 }

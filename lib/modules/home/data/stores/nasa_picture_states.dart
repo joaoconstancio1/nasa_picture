@@ -13,7 +13,7 @@ class NasaPictureInitialState extends NasaPictureState {}
 class NasaPictureLoadingState extends NasaPictureState {}
 
 class NasaPictureSuccessState extends NasaPictureState {
-  final NasaPictureEntity entity;
+  final List<NasaPictureEntity> entity;
 
   const NasaPictureSuccessState(this.entity);
 }

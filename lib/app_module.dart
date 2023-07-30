@@ -25,9 +25,9 @@ class AppModule extends Module {
         store: context.read(),
       ),
     ),
-    // ChildRoute(
-    //   '/details',
-    //   child: (context, args) => DetailsPage(),
-    // ),
+    ChildRoute(
+      '/details',
+      child: (context, args) => DetailsPage(entity: args.data),
+    ),
   ];
 }

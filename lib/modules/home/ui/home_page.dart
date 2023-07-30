@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_states.dart';
+import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -34,13 +35,18 @@ class _HomePageState extends State<HomePage> {
         onError: (_, __) => Text('Error occurred'),
         onState: (context, NasaPictureState state) {
           if (state is NasaPictureSuccessState) {
-            const double borderRadius = 10.0;
-            return ListView(
+            final List<NasaPictureEntity> nasaPictures = state.entity;
+
+            return ListView.builder(
               padding: const EdgeInsets.all(12),
-              children: [
-                GestureDetector(
+              itemCount: nasaPictures.length,
+              itemBuilder: (context, index) {
+                final NasaPictureEntity nasaPicture = nasaPictures[index];
+                const double borderRadius = 10.0;
+
+                return GestureDetector(
                   onTap: () {
-                    Modular.to.pushNamed('details');
+                    Modular.to.pushNamed('details', arguments: nasaPicture);
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(
@@ -50,10 +56,11 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(borderRadius),
-                              topRight: Radius.circular(borderRadius)),
+                            topLeft: Radius.circular(borderRadius),
+                            topRight: Radius.circular(borderRadius),
+                          ),
                           child: Image.network(
-                            state.entity.url ?? '',
+                            nasaPicture.url ?? '',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -63,14 +70,14 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                state.entity.title ?? '',
+                                nasaPicture.title ?? '',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                state.entity.date ?? '',
+                                nasaPicture.date ?? '',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
@@ -82,10 +89,15 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                );
+              },
             );
+          } else if (state is NasaPictureLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is NasaPictureErrorState) {
+            return Text('Error occurred');
           }
+
           return SizedBox();
         },
       ),
