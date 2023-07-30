@@ -69,18 +69,22 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                nasaPicture.title ?? '',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Text(
+                                  nasaPicture.title ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                              Text(
-                                nasaPicture.date ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
+                              Flexible(
+                                child: Text(
+                                  nasaPicture.date ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ],
