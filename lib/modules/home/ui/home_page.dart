@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(title: const Text('Nasa Pictures'), centerTitle: true),
       body: ScopedBuilder(
         store: widget.store,
@@ -49,21 +48,12 @@ class _HomePageState extends State<HomePage> {
                     Modular.to.pushNamed('details', arguments: nasaPicture);
                   },
                   child: Card(
+                    elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(borderRadius),
                     ),
                     child: Column(
                       children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(borderRadius),
-                            topRight: Radius.circular(borderRadius),
-                          ),
-                          child: Image.network(
-                            nasaPicture.url ?? '',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
