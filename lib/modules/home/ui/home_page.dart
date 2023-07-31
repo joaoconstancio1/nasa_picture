@@ -26,6 +26,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Future<void> _handleRefresh() async {
+    widget.store.getData();
+  }
+
   void _filterNasaPictures(String query) {
     final currentState = widget.store.state;
     if (currentState is NasaPictureSuccessState) {
@@ -70,75 +74,77 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ScopedBuilder(
-        store: widget.store,
-        onLoading: (_) => const Center(child: CircularProgressIndicator()),
-        onError: (_, __) => const Text('Error occurred'),
-        onState: (context, NasaPictureState state) {
-          if (state is NasaPictureSuccessState) {
-            final List<NasaPictureEntity> nasaPictures =
-                _filteredNasaPictures.isNotEmpty
-                    ? _filteredNasaPictures
-                    : state.entity;
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: ScopedBuilder(
+          store: widget.store,
+          onError: (_, __) => const Text('Error occurred'),
+          onState: (context, NasaPictureState state) {
+            if (state is NasaPictureSuccessState) {
+              final List<NasaPictureEntity> nasaPictures =
+                  _filteredNasaPictures.isNotEmpty
+                      ? _filteredNasaPictures
+                      : state.entity;
 
-            return ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: nasaPictures.length,
-              itemBuilder: (context, index) {
-                final NasaPictureEntity nasaPicture = nasaPictures[index];
-                const double borderRadius = 10.0;
+              return ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: nasaPictures.length,
+                itemBuilder: (context, index) {
+                  final NasaPictureEntity nasaPicture = nasaPictures[index];
+                  const double borderRadius = 10.0;
 
-                return GestureDetector(
-                  onTap: () {
-                    Modular.to.pushNamed('details', arguments: nasaPicture);
-                  },
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  nasaPicture.title ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                  return GestureDetector(
+                    onTap: () {
+                      Modular.to.pushNamed('details', arguments: nasaPicture);
+                    },
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    nasaPicture.title ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Flexible(
-                                child: Text(
-                                  nasaPicture.date ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
+                                Flexible(
+                                  child: Text(
+                                    nasaPicture.date ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          } else if (state is NasaPictureLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is NasaPictureErrorState) {
-            return const Text('Error occurred');
-          }
+                  );
+                },
+              );
+            } else if (state is NasaPictureLoadingState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is NasaPictureErrorState) {
+              return const Text('Error occurred');
+            }
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

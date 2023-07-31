@@ -8,15 +8,14 @@ class NasaPictureStore extends Store<NasaPictureState> {
 
   void getData() async {
     try {
-      setLoading(true);
+      update(NasaPictureLoadingState());
       final result = await usecase.call();
-      result.fold((l) => update(NasaPictureErrorState(exception: l)), (r) {
-        update(NasaPictureSuccessState(r));
-      });
+      result.fold(
+        (l) => update(NasaPictureErrorState(exception: l)),
+        (r) => update(NasaPictureSuccessState(r)),
+      );
     } on Exception catch (e) {
       setError(e);
-    } finally {
-      setLoading(false);
     }
   }
 }

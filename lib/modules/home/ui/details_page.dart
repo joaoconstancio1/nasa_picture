@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 
@@ -11,7 +12,7 @@ class DetailsPage extends StatelessWidget {
     const double borderRadius = 10.0;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalhes'), centerTitle: true),
+      appBar: AppBar(title: const Text('Details'), centerTitle: true),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -28,27 +29,15 @@ class DetailsPage extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      Center(
-                        child: Image.network(
-                          entity.url ?? '',
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.error);
-                          },
+                      CachedNetworkImage(
+                        imageUrl: entity.url ?? '',
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
                         ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ],
                   ),
