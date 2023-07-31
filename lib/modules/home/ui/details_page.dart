@@ -12,7 +12,11 @@ class DetailsPage extends StatelessWidget {
     const double borderRadius = 10.0;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Details'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Details'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
