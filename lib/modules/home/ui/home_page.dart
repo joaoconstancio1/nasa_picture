@@ -18,23 +18,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<NasaPictureEntity> _filteredNasaPictures = [];
+
   @override
   void initState() {
     widget.store.getData();
     super.initState();
   }
 
+  void _filterNasaPictures(String query) {
+    final currentState = widget.store.state;
+    if (currentState is NasaPictureSuccessState) {
+      setState(() {
+        _filteredNasaPictures = currentState.entity
+            .where((picture) =>
+                picture.title?.toLowerCase().contains(query.toLowerCase()) ==
+                    true ||
+                picture.date?.toLowerCase().contains(query.toLowerCase()) ==
+                    true)
+            .toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Nasa Pictures'), centerTitle: true),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        actions: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: TextField(
+                onChanged: _filterNasaPictures,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: const InputDecoration(
+                  hintText: 'Search...',
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: ScopedBuilder(
         store: widget.store,
         onLoading: (_) => const Center(child: CircularProgressIndicator()),
-        onError: (_, __) => Text('Error occurred'),
+        onError: (_, __) => const Text('Error occurred'),
         onState: (context, NasaPictureState state) {
           if (state is NasaPictureSuccessState) {
-            final List<NasaPictureEntity> nasaPictures = state.entity;
+            final List<NasaPictureEntity> nasaPictures =
+                _filteredNasaPictures.isNotEmpty
+                    ? _filteredNasaPictures
+                    : state.entity;
 
             return ListView.builder(
               padding: const EdgeInsets.all(12),
@@ -89,10 +134,10 @@ class _HomePageState extends State<HomePage> {
           } else if (state is NasaPictureLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is NasaPictureErrorState) {
-            return Text('Error occurred');
+            return const Text('Error occurred');
           }
 
-          return SizedBox();
+          return const SizedBox();
         },
       ),
     );
