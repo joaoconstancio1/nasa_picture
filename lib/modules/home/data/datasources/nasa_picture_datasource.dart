@@ -7,12 +7,14 @@ mixin NasaPictureDataSource {
 }
 
 class NasaPictureDataSourceImpl implements NasaPictureDataSource {
-  final Dio dio = Dio();
+  final Dio dio;
+
+  NasaPictureDataSourceImpl(this.dio);
 
   @override
   Future<List<NasaPictureEntity>> getData() async {
     const url =
-        'https://api.nasa.gov/planetary/apod?api_key=01TCw2u3fDTduBASpGuEfNighIUcIutFX3ZjGxhr&start_date=2023-01-01&end_date=2023-03-01';
+        'https://api.nasa.gov/planetary/apod?api_key=01TCw2u3fDTduBASpGuEfNighIUcIutFX3ZjGxhr&start_date=2023-02-01&end_date=2023-03-01';
     try {
       final response = await dio.get(url);
 

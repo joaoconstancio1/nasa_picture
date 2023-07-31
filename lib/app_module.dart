@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasource.dart';
@@ -10,7 +11,8 @@ import 'package:nasa_picture/modules/home/ui/home_page.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => NasaPictureDataSourceImpl()),
+    Bind((i) => Dio()),
+    Bind((i) => NasaPictureDataSourceImpl(i())),
     Bind((i) => NasaPictureDto()),
     Bind((i) => NasaPictureUsecaseImp(i())),
     Bind((i) => NasaPictureServiceImpl(i())),
