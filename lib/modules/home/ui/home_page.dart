@@ -16,46 +16,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<NasaPictureEntity> _filteredNasaPictures = [];
-  int _currentPage = 1;
-  final TextEditingController _searchController = TextEditingController();
   final store = Modular.get<NasaPictureStore>();
 
   @override
   void initState() {
-    _fetchData(page: _currentPage);
-    _searchController.addListener(_onSearchTextChanged);
+    store.getData();
+    store.searchController.addListener(_onSearchTextChanged);
 
     super.initState();
   }
 
   void _onSearchTextChanged() {
-    _filterNasaPictures(_searchController.text);
-  }
-
-  void _loadMore() {
-    setState(() {
-      _currentPage++;
-    });
-    _fetchData(page: _currentPage);
-    _resetSearch();
-  }
-
-  void _fetchData({required int page}) {
-    store.getData(page: page);
-  }
-
-  Future<void> _handleRefresh() async {
-    _currentPage = 1;
-    store.getData(page: _currentPage);
-    _resetSearch();
+    _filterNasaPictures(store.searchController.text);
   }
 
   void _filterNasaPictures(String query) {
     final currentState = store.state;
     if (currentState is NasaPictureSuccessState) {
       setState(() {
-        _filteredNasaPictures = currentState.entity
+        store.filteredNasaPictures = currentState.entity
             .where((picture) =>
                 picture.title?.toLowerCase().contains(query.toLowerCase()) ==
                     true ||
@@ -64,13 +43,6 @@ class _HomePageState extends State<HomePage> {
             .toList();
       });
     }
-  }
-
-  void _resetSearch() {
-    setState(() {
-      _searchController.text = '';
-      _filteredNasaPictures = [];
-    });
   }
 
   @override
@@ -84,7 +56,7 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: TextField(
-                controller: _searchController,
+                controller: store.searchController,
                 onChanged: _filterNasaPictures,
                 style: const TextStyle(
                   color: Colors.white,
@@ -104,15 +76,15 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: _handleRefresh,
+        onRefresh: store.handleRefresh,
         child: ScopedBuilder(
           store: store,
           onError: (_, __) => const Text('Error occurred'),
           onState: (context, NasaPictureState state) {
             if (state is NasaPictureSuccessState) {
               final List<NasaPictureEntity> nasaPictures =
-                  _filteredNasaPictures.isNotEmpty
-                      ? _filteredNasaPictures
+                  store.filteredNasaPictures.isNotEmpty
+                      ? store.filteredNasaPictures
                       : state.entity;
 
               return ListView(
@@ -128,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                       return NasaPictureCard(
                         nasaPicture: nasaPicture,
                         index: index,
-                        resetSearch: _resetSearch,
+                        resetSearch: store.resetSearch,
                       );
                     },
                   ),
@@ -142,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: _loadMore,
+                      onPressed: store.loadMore,
                       child: const Text(
                         'Load More',
                         style: TextStyle(fontSize: 18),
