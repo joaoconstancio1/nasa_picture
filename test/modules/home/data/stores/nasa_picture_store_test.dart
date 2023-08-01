@@ -25,7 +25,7 @@ void main() {
                 NasaPictureEntity(),
               ]));
 
-      nasaPictureStore.getData(page: 1);
+      nasaPictureStore.getData();
 
       await untilCalled(() => mockNasaPictureUsecase.call(1));
 
@@ -37,7 +37,7 @@ void main() {
       when(() => mockNasaPictureUsecase.call(any()))
           .thenAnswer((_) async => Left(Exception()));
 
-      nasaPictureStore.getData(page: 1);
+      nasaPictureStore.getData();
 
       await untilCalled(() => mockNasaPictureUsecase.call(1));
 
