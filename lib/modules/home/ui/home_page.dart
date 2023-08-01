@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_states.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
+import 'package:nasa_picture/modules/home/ui/widgets/nasa_picture_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -20,10 +20,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<NasaPictureEntity> _filteredNasaPictures = [];
   int _currentPage = 1;
+  TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     _fetchData(page: _currentPage);
+    _searchController.addListener(_onSearchTextChanged);
+
     super.initState();
+  }
+
+  void _onSearchTextChanged() {
+    _filterNasaPictures(_searchController.text);
   }
 
   void _loadMore() {
@@ -31,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       _currentPage++;
     });
     _fetchData(page: _currentPage);
+    _resetSearch();
   }
 
   void _fetchData({required int page}) {
@@ -40,6 +49,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleRefresh() async {
     _currentPage = 1;
     widget.store.getData(page: _currentPage);
+    _resetSearch();
   }
 
   void _filterNasaPictures(String query) {
@@ -57,6 +67,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _resetSearch() {
+    setState(() {
+      _searchController.text = '';
+      _filteredNasaPictures = [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +85,7 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: TextField(
+                controller: _searchController,
                 onChanged: _filterNasaPictures,
                 style: const TextStyle(
                   color: Colors.white,
@@ -107,51 +125,11 @@ class _HomePageState extends State<HomePage> {
                     itemCount: nasaPictures.length,
                     itemBuilder: (context, index) {
                       final NasaPictureEntity nasaPicture = nasaPictures[index];
-                      const double borderRadius = 10.0;
 
-                      return GestureDetector(
-                        onTap: () {
-                          Modular.to
-                              .pushNamed('details', arguments: nasaPicture);
-                        },
-                        child: Card(
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(borderRadius),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(index.toString()),
-                                    Flexible(
-                                      child: Text(
-                                        nasaPicture.title ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        nasaPicture.date ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      return NasaPictureCard(
+                        nasaPicture: nasaPicture,
+                        index: index,
+                        resetSearch: _resetSearch,
                       );
                     },
                   ),
