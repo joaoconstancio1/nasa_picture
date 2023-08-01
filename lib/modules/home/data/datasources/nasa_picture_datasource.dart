@@ -9,25 +9,10 @@ mixin NasaPictureDataSource {
 
 class NasaPictureDataSourceImpl implements NasaPictureDataSource {
   final Dio dio;
-  List<NasaPictureEntity> cachedData = [];
+  late List<NasaPictureEntity> cachedData;
 
-  NasaPictureDataSourceImpl(this.dio);
-
-  DateTime parseDate(String dateStr) => DateTime.parse(dateStr);
-
-  int compareByDate(NasaPictureEntity a, NasaPictureEntity b) {
-    final aDate = a.date;
-    final bDate = b.date;
-
-    if (aDate == null && bDate == null) {
-      return 0;
-    } else if (aDate == null) {
-      return 1;
-    } else if (bDate == null) {
-      return -1;
-    } else {
-      return parseDate(bDate).compareTo(parseDate(aDate));
-    }
+  NasaPictureDataSourceImpl(this.dio) {
+    cachedData = [];
   }
 
   @override
@@ -40,7 +25,7 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
 
     DateTime endDate =
         DateTime.now().subtract(Duration(days: (page - 1) * subtractDate));
-    DateTime startDate = endDate.subtract(Duration(days: subtractDate));
+    DateTime startDate = endDate.subtract(const Duration(days: subtractDate));
 
     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
@@ -54,8 +39,10 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
       final List<NasaPictureDto> nasaPictureList = List<NasaPictureDto>.from(
           response.data.map((item) => NasaPictureDto.fromJson(item)));
 
+      final Set<String> urlSet = Set<String>.from(cachedData.map((e) => e.url));
+
       for (var dto in nasaPictureList) {
-        if (!cachedData.any((cachedItem) => cachedItem.url == dto.url)) {
+        if (!urlSet.contains(dto.url)) {
           cachedData.add(NasaPictureEntity(
             url: dto.url,
             title: dto.title,
@@ -65,7 +52,7 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
         }
       }
 
-      cachedData.sort(compareByDate);
+      cachedData.sort((a, b) => b.date!.compareTo(a.date!));
 
       return List<NasaPictureEntity>.from(cachedData);
     } catch (e) {

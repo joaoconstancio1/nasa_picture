@@ -127,6 +127,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    Text(index.toString()),
                                     Flexible(
                                       child: Text(
                                         nasaPicture.title ?? '',
