@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:nasa_picture/env.dart';
 import 'package:nasa_picture/modules/home/data/dto/nasa_picture_dto.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:intl/intl.dart';
@@ -23,21 +24,20 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
 
     const int subtractDate = 10;
 
-    DateTime endDate =
-        DateTime.now().subtract(Duration(days: (page - 1) * subtractDate));
+    DateTime endDate = DateTime.now().subtract(Duration(days: (page - 1) * subtractDate));
     DateTime startDate = endDate.subtract(const Duration(days: subtractDate));
 
     String formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
     String formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
 
-    final url =
-        'https://api.nasa.gov/planetary/apod?api_key=01TCw2u3fDTduBASpGuEfNighIUcIutFX3ZjGxhr&start_date=$formattedStartDate&end_date=$formattedEndDate';
+    final baseUrl = EnvImpl().baseUrl;
+    final url = '$baseUrl&start_date=$formattedStartDate&end_date=$formattedEndDate';
 
     try {
       final response = await dio.get(url);
 
-      final List<NasaPictureDto> nasaPictureList = List<NasaPictureDto>.from(
-          response.data.map((item) => NasaPictureDto.fromJson(item)));
+      final List<NasaPictureDto> nasaPictureList =
+          List<NasaPictureDto>.from(response.data.map((item) => NasaPictureDto.fromJson(item)));
 
       final Set<String> urlSet = Set<String>.from(cachedData.map((e) => e.url));
 
