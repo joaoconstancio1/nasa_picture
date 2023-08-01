@@ -28,6 +28,8 @@ This is a Flutter application that fetches images from NASA's API to display ava
 ## Getting Started
 
 ### Prerequisites
+The app has been tested on android.
+
 Before setting up the project, ensure you have the following installed on your development machine:
 
 - Flutter SDK 3.10.6

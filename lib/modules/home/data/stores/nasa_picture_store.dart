@@ -25,9 +25,24 @@ class NasaPictureStore extends Store<NasaPictureState> {
     }
   }
 
+  void filterNasaPictures(String query) {
+    final currentState = state;
+    if (currentState is NasaPictureSuccessState) {
+      filteredNasaPictures = currentState.entity
+          .where((picture) =>
+              picture.title?.toLowerCase().contains(query.toLowerCase()) ==
+                  true ||
+              picture.date?.toLowerCase().contains(query.toLowerCase()) == true)
+          .toList();
+    }
+  }
+
+  void onSearchTextChanged() {
+    filterNasaPictures(searchController.text);
+  }
+
   void loadMore() {
     currentPage++;
-
     getData();
     resetSearch();
   }

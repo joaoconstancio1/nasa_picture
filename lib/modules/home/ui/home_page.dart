@@ -21,29 +21,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     store.getData();
-    store.searchController.addListener(_onSearchTextChanged);
+    _filterData();
 
     super.initState();
   }
 
-  void _onSearchTextChanged() {
-    _filterNasaPictures(store.searchController.text);
-  }
-
-  void _filterNasaPictures(String query) {
-    final currentState = store.state;
-    if (currentState is NasaPictureSuccessState) {
-      setState(() {
-        store.filteredNasaPictures = currentState.entity
-            .where((picture) =>
-                picture.title?.toLowerCase().contains(query.toLowerCase()) ==
-                    true ||
-                picture.date?.toLowerCase().contains(query.toLowerCase()) ==
-                    true)
-            .toList();
+  _filterData() => store.searchController.addListener(() {
+        store.filterNasaPictures(store.searchController.text);
+        setState(() {});
       });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +43,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: TextField(
                 controller: store.searchController,
-                onChanged: _filterNasaPictures,
+                onChanged: store.filterNasaPictures,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
