@@ -26,18 +26,19 @@ void main() {
       ),
     ];
 
-    when(() => dataSource.getData()).thenAnswer((_) async => listNasaEntity);
+    when(() => dataSource.getData(any()))
+        .thenAnswer((_) async => listNasaEntity);
 
-    final result = await service.getData();
+    final result = await service.getData(1);
 
     expect(result, isA<Right<Exception, List<NasaPictureEntity>>>());
   });
 
   test('should return an error when the data is not fetched successfully',
       () async {
-    when(() => dataSource.getData()).thenThrow(Exception('Error'));
+    when(() => dataSource.getData(any())).thenThrow(Exception('Error'));
 
-    final result = await service.getData();
+    final result = await service.getData(1);
 
     expect(result, isA<Left<Exception, List<NasaPictureEntity>>>());
   });

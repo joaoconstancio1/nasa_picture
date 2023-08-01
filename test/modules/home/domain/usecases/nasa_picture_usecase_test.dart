@@ -21,26 +21,24 @@ void main() {
       final mockData = [
         NasaPictureEntity(title: 'Nasa title', url: 'example.com/image.jpg')
       ];
-      when(() => mockService.getData())
+      when(() => mockService.getData(any()))
           .thenAnswer((_) async => Right(mockData));
 
-      final result = await usecase.call();
+      final result = await usecase.call(1);
 
       expect(result, equals(Right(mockData)));
-      verify(() => mockService.getData()).called(1);
+      verify(() => mockService.getData(any())).called(1);
     });
 
     test('Should return an exception when an error occurs', () async {
       final mockError = Exception('Error fetching data');
-      when(() => mockService.getData())
+      when(() => mockService.getData(any()))
           .thenAnswer((_) async => Left(mockError));
 
-      // Act
-      final result = await usecase.call();
+      final result = await usecase.call(1);
 
-      // Assert
       expect(result, equals(Left(mockError)));
-      verify(() => mockService.getData()).called(1);
+      verify(() => mockService.getData(any())).called(1);
     });
   });
 }

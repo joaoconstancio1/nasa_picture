@@ -29,7 +29,7 @@ void main() {
     when(() => dio.get(any())).thenAnswer((_) async => response);
 
     final List<NasaPictureEntity> nasaPictureEntityList =
-        await dataSource.getData();
+        await dataSource.getData(1);
 
     expect(nasaPictureEntityList, response.data);
   });
@@ -39,7 +39,7 @@ void main() {
         DioException(requestOptions: requestOptionsMock, error: 'Error'));
 
     try {
-      await dataSource.getData();
+      await dataSource.getData(1);
     } catch (e) {
       expect(e, isA<Exception>());
     }
