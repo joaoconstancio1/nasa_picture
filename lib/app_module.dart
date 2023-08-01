@@ -23,9 +23,7 @@ class AppModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(
       '/',
-      child: (context, args) => HomePage(
-        store: context.read(),
-      ),
+      child: (context, args) => HomePage(),
     ),
     ChildRoute(
       '/details',

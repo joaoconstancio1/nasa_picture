@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_states.dart';
@@ -8,10 +9,7 @@ import 'package:nasa_picture/modules/home/ui/widgets/nasa_picture_card.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
-    required this.store,
   }) : super(key: key);
-
-  final NasaPictureStore store;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,7 +18,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<NasaPictureEntity> _filteredNasaPictures = [];
   int _currentPage = 1;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final store = Modular.get<NasaPictureStore>();
 
   @override
   void initState() {
@@ -43,17 +42,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fetchData({required int page}) {
-    widget.store.getData(page: page);
+    store.getData(page: page);
   }
 
   Future<void> _handleRefresh() async {
     _currentPage = 1;
-    widget.store.getData(page: _currentPage);
+    store.getData(page: _currentPage);
     _resetSearch();
   }
 
   void _filterNasaPictures(String query) {
-    final currentState = widget.store.state;
+    final currentState = store.state;
     if (currentState is NasaPictureSuccessState) {
       setState(() {
         _filteredNasaPictures = currentState.entity
@@ -107,7 +106,7 @@ class _HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: ScopedBuilder(
-          store: widget.store,
+          store: store,
           onError: (_, __) => const Text('Error occurred'),
           onState: (context, NasaPictureState state) {
             if (state is NasaPictureSuccessState) {
