@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
               return ListView(
                 children: [
                   ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     padding: const EdgeInsets.all(12),
                     itemCount: nasaPictures.length,
@@ -150,13 +150,23 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       onPressed: () {
                         setState(() {
                           _currentPage++;
                         });
                         _fetchData(page: _currentPage);
                       },
-                      child: Text('Load More'),
+                      child: const Text(
+                        'Load More',
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
                   ),
                 ],
