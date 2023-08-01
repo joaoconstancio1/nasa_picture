@@ -6,10 +6,10 @@ class NasaPictureStore extends Store<NasaPictureState> {
   final NasaPictureUsecase usecase;
   NasaPictureStore(this.usecase) : super(NasaPictureInitialState());
 
-  void getData() async {
+  void getData({required int page}) async {
     try {
       update(NasaPictureLoadingState());
-      final result = await usecase.call();
+      final result = await usecase.call(page);
       result.fold(
         (l) => update(NasaPictureErrorState(exception: l)),
         (r) => update(NasaPictureSuccessState(r)),

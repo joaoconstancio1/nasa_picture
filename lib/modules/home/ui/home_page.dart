@@ -19,15 +19,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<NasaPictureEntity> _filteredNasaPictures = [];
-
+  int _currentPage = 1;
   @override
   void initState() {
-    widget.store.getData();
+    _fetchData(page: _currentPage);
     super.initState();
   }
 
+  void _fetchData({required int page}) {
+    widget.store.getData(page: page);
+  }
+
   Future<void> _handleRefresh() async {
-    widget.store.getData();
+    _currentPage = 1;
+    widget.store.getData(page: _currentPage);
   }
 
   void _filterNasaPictures(String query) {
@@ -86,55 +91,75 @@ class _HomePageState extends State<HomePage> {
                       ? _filteredNasaPictures
                       : state.entity;
 
-              return ListView.builder(
-                padding: const EdgeInsets.all(12),
-                itemCount: nasaPictures.length,
-                itemBuilder: (context, index) {
-                  final NasaPictureEntity nasaPicture = nasaPictures[index];
-                  const double borderRadius = 10.0;
+              return ListView(
+                children: [
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(12),
+                    itemCount: nasaPictures.length,
+                    itemBuilder: (context, index) {
+                      final NasaPictureEntity nasaPicture = nasaPictures[index];
+                      const double borderRadius = 10.0;
 
-                  return GestureDetector(
-                    onTap: () {
-                      Modular.to.pushNamed('details', arguments: nasaPicture);
-                    },
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderRadius),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    nasaPicture.title ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Text(
-                                    nasaPicture.date ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                      return GestureDetector(
+                        onTap: () {
+                          Modular.to
+                              .pushNamed('details', arguments: nasaPicture);
+                        },
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius),
                           ),
-                        ],
-                      ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        nasaPicture.title ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        nasaPicture.date ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentPage++;
+                        });
+                        _fetchData(page: _currentPage);
+                      },
+                      child: Text('Load More'),
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             } else if (state is NasaPictureLoadingState) {
               return const Center(child: CircularProgressIndicator());

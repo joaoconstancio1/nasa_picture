@@ -3,7 +3,7 @@ import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasour
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 
 mixin NasaPictureService {
-  Future<Either<Exception, List<NasaPictureEntity>>> getData();
+  Future<Either<Exception, List<NasaPictureEntity>>> getData(int page);
 }
 
 class NasaPictureServiceImpl implements NasaPictureService {
@@ -11,9 +11,9 @@ class NasaPictureServiceImpl implements NasaPictureService {
   NasaPictureServiceImpl(this.dataSource);
 
   @override
-  Future<Either<Exception, List<NasaPictureEntity>>> getData() async {
+  Future<Either<Exception, List<NasaPictureEntity>>> getData(int page) async {
     try {
-      final result = await dataSource.getData();
+      final result = await dataSource.getData(page);
 
       return Right(result);
     } on Exception catch (error) {
