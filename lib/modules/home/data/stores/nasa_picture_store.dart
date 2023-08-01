@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:nasa_picture/modules/home/data/stores/nasa_picture_states.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
@@ -50,6 +51,7 @@ class NasaPictureStore extends Store<NasaPictureState> {
   void resetSearch() {
     searchController.text = '';
     filteredNasaPictures = [];
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
   Future<void> handleRefresh() async {
