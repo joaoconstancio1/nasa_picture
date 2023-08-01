@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
+import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasource.dart';
 import 'package:nasa_picture/modules/home/data/dto/nasa_picture_dto.dart';
 import 'package:nasa_picture/modules/home/data/repositories/nasa_picture_repository_impl.dart';
 import 'package:nasa_picture/modules/home/domain/usecases/nasa_picture_usecase.dart';
-import 'package:nasa_picture/modules/home/ui/details_page.dart';
-import 'package:nasa_picture/modules/home/ui/home_page.dart';
+import 'package:nasa_picture/modules/home/presenter/details_page.dart';
+import 'package:nasa_picture/modules/home/presenter/home_page.dart';
 
 class AppModule extends Module {
   @override

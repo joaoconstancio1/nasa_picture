@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nasa_picture/modules/home/data/stores/nasa_picture_states.dart';
-import 'package:nasa_picture/modules/home/data/stores/nasa_picture_store.dart';
+import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_states.dart';
+import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:nasa_picture/modules/home/domain/usecases/nasa_picture_usecase.dart';
 
@@ -19,11 +19,10 @@ void main() {
     });
 
     test('getData() - Success State', () async {
-      when(() => mockNasaPictureUsecase.call(any()))
-          .thenAnswer((_) async => Right([
-                NasaPictureEntity(),
-                NasaPictureEntity(),
-              ]));
+      when(() => mockNasaPictureUsecase.call(any())).thenAnswer((_) async => Right([
+            NasaPictureEntity(),
+            NasaPictureEntity(),
+          ]));
 
       nasaPictureStore.getData();
 
@@ -34,8 +33,7 @@ void main() {
     });
 
     test('getData() - Error State', () async {
-      when(() => mockNasaPictureUsecase.call(any()))
-          .thenAnswer((_) async => Left(Exception()));
+      when(() => mockNasaPictureUsecase.call(any())).thenAnswer((_) async => Left(Exception()));
 
       nasaPictureStore.getData();
 
