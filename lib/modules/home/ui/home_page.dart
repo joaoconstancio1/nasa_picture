@@ -26,6 +26,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  void _loadMore() {
+    setState(() {
+      _currentPage++;
+    });
+    _fetchData(page: _currentPage);
+  }
+
   void _fetchData({required int page}) {
     widget.store.getData(page: page);
   }
@@ -157,12 +164,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _currentPage++;
-                        });
-                        _fetchData(page: _currentPage);
-                      },
+                      onPressed: _loadMore,
                       child: const Text(
                         'Load More',
                         style: TextStyle(fontSize: 18),
