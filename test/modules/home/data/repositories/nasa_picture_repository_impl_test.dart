@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasource.dart';
-import 'package:nasa_picture/modules/home/data/services/nasa_picture_service.dart';
+import 'package:nasa_picture/modules/home/data/repositories/nasa_picture_repository_impl.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -9,10 +9,9 @@ class MockNasaPictureDataSource extends Mock implements NasaPictureDataSource {}
 
 void main() {
   final dataSource = MockNasaPictureDataSource();
-  final service = NasaPictureServiceImpl(dataSource);
+  final repository = NasaPictureRepositoryImpl(dataSource);
 
-  test('should return a list of NasaPictureEntity when the data is fetched',
-      () async {
+  test('should return a list of NasaPictureEntity when the data is fetched', () async {
     List<NasaPictureEntity> listNasaEntity = [
       NasaPictureEntity(
         title: 'Title 1',
@@ -26,19 +25,17 @@ void main() {
       ),
     ];
 
-    when(() => dataSource.getData(any()))
-        .thenAnswer((_) async => listNasaEntity);
+    when(() => dataSource.getData(any())).thenAnswer((_) async => listNasaEntity);
 
-    final result = await service.getData(1);
+    final result = await repository.getData(1);
 
     expect(result, isA<Right<Exception, List<NasaPictureEntity>>>());
   });
 
-  test('should return an error when the data is not fetched successfully',
-      () async {
+  test('should return an error when the data is not fetched successfully', () async {
     when(() => dataSource.getData(any())).thenThrow(Exception('Error'));
 
-    final result = await service.getData(1);
+    final result = await repository.getData(1);
 
     expect(result, isA<Left<Exception, List<NasaPictureEntity>>>());
   });
