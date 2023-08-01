@@ -63,13 +63,27 @@ flutter pub get
 This will fetch all the required packages and dependencies for the project.
 
 ### Run the App
+
+You need to use the NASA API, create a free account and use the API key generated right after signing up.
+
+API documentation:
+
+- https://api.nasa.gov (click Browse APIs and check APOD)
+
 You can run the app on an emulator/simulator or a physical device by executing the following command:
 
+Where YOUR_API_KEY is the key you received when registering on NASA's website.
+
 ```
-flutter run
+flutter run --dart-define=BASE_URL=https://api.nasa.gov/planetary/apod?api_key=YOUR_API_KEY
 ```
 
-### Run Tests
+You also can use DEMO_KEY for a quick test.
+```
+flutter run --dart-define=BASE_URL=https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
+```
+
+## Run Tests
 You can run the app on an emulator/simulator or a physical device by executing the following command:
 
 ```
