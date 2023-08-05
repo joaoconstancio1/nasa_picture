@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasource.dart';
 import 'package:nasa_picture/modules/home/data/repositories/nasa_picture_repository_impl.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
-import 'package:mocktail/mocktail.dart';
 
 class MockNasaPictureDataSource extends Mock implements NasaPictureDataSource {}
 

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:nasa_picture/env.dart';
-import 'package:nasa_picture/modules/home/data/dto/nasa_picture_dto.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:intl/intl.dart';
+import '../../../../env.dart';
+import '../../domain/entities/nasa_picture_entity.dart';
+import '../dto/nasa_picture_dto.dart';
 
 mixin NasaPictureDataSource {
   Future<List<NasaPictureEntity>> getData(int page);
@@ -37,6 +37,7 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
       final response = await dio.get(url);
 
       final List<NasaPictureDto> nasaPictureList =
+          // ignore: unnecessary_lambdas
           List<NasaPictureDto>.from(response.data.map((item) => NasaPictureDto.fromJson(item)));
 
       final Set<String> urlSet = Set<String>.from(cachedData.map((e) => e.url));
@@ -55,8 +56,8 @@ class NasaPictureDataSourceImpl implements NasaPictureDataSource {
       cachedData.sort((a, b) => b.date!.compareTo(a.date!));
 
       return List<NasaPictureEntity>.from(cachedData);
-    } catch (e) {
-      throw Exception(e);
+    } on DioException catch (e) {
+      throw Exception('Request error: ${e.message}');
     }
   }
 }

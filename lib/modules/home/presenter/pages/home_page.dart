@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_store.dart';
-import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_states.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
-import 'package:nasa_picture/modules/home/presenter/widgets/nasa_picture_card.dart';
+
+import '../../domain/entities/nasa_picture_entity.dart';
+import '../stores/nasa_picture_states.dart';
+import '../stores/nasa_picture_store.dart';
+import '../widgets/nasa_picture_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -69,7 +70,9 @@ class _HomePageState extends State<HomePage> {
           onState: (context, NasaPictureState state) {
             if (state is NasaPictureSuccessState) {
               final List<NasaPictureEntity> nasaPictures =
-                  store.filteredNasaPictures.isNotEmpty ? store.filteredNasaPictures : state.entity;
+                  store.filteredNasaPictures.isNotEmpty
+                      ? store.filteredNasaPictures
+                      : state.entity;
 
               return ListView(
                 children: [

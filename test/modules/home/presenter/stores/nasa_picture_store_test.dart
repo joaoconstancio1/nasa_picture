@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_states.dart';
-import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_store.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:nasa_picture/modules/home/domain/usecases/nasa_picture_usecase.dart';
+import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_states.dart';
+import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_store.dart';
 
 class MockNasaPictureUsecase extends Mock implements NasaPictureUsecase {}
 
@@ -62,21 +62,21 @@ void main() {
 
       final initialPage = store.currentPage;
 
-      store.loadMore();
+      await store.loadMore();
 
       expect(store.currentPage, initialPage + 1);
       verify(() => usecase.call(initialPage + 1));
       expect(store.filteredNasaPictures, isEmpty);
       expect(store.searchController.text, '');
     });
-    test('resetSearch should reset the searchController and filteredNasaPictures', () {
+    test('resetSearch should reset the searchController and filteredNasaPictures', () async {
       store.filteredNasaPictures = [
         NasaPictureEntity(title: 'Picture 1', date: '2023-08-01'),
         NasaPictureEntity(title: 'Picture 2', date: '2023-08-02'),
       ];
       store.searchController.text = 'search query';
 
-      store.resetSearch();
+      await store.resetSearch();
 
       expect(store.filteredNasaPictures, isEmpty);
       expect(store.searchController.text, '');
@@ -90,7 +90,7 @@ void main() {
       ];
       store.searchController.text = 'search query';
 
-      store.handleRefresh();
+      await store.handleRefresh();
 
       expect(store.currentPage, 1);
       verify(() => usecase.call(1));

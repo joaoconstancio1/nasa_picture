@@ -1,4 +1,4 @@
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
+import '../../domain/entities/nasa_picture_entity.dart';
 
 class NasaPictureDto implements NasaPictureEntity {
   @override

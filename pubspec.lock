@@ -648,14 +648,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  triple_test:
-    dependency: "direct main"
-    description:
-      name: triple_test
-      sha256: "204ac23ced355364ec81e0efdd6442bf0f931d0592886488fcc8516b66ab59e2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:

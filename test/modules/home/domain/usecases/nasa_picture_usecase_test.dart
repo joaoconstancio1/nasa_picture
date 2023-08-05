@@ -1,6 +1,6 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:dartz/dartz.dart';
 import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
 import 'package:nasa_picture/modules/home/domain/repositories/nasa_picture_repository.dart';
 import 'package:nasa_picture/modules/home/domain/usecases/nasa_picture_usecase.dart';

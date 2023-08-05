@@ -1,29 +1,53 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+include: package:lints/recommended.yaml
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at
-  # https://dart-lang.github.io/linter/lints/index.html.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    - always_put_required_named_parameters_first
+    - avoid_annotating_with_dynamic
+    - avoid_catches_without_on_clauses
+    - avoid_catching_errors
+    - avoid_positional_boolean_parameters
+    - avoid_print
+    - avoid_redundant_argument_values
+    - avoid_returning_null
+    - avoid_returning_null_for_future
+    - avoid_returning_this
+    - avoid_setters_without_getters
+    - avoid_slow_async_io
+    - cancel_subscriptions
+    - cast_nullable_to_non_nullable
+    - comment_references
+    - dangling_library_doc_comments
+    - directives_ordering
+    - discarded_futures
+    - join_return_with_assignment
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - noop_primitive_operations
+    - only_throw_errors
+    - package_api_docs
+    - parameter_assignments
+    - prefer_asserts_in_initializer_lists
+    - prefer_const_constructors_in_immutables
+    - prefer_constructors_over_static_methods
+    - prefer_foreach
+    - prefer_null_aware_method_calls
+    - prefer_relative_imports
+    - prefer_single_quotes
+    - sort_pub_dependencies
+    - test_types_in_equals
+    - throw_in_finally
+    - unawaited_futures # pedantic
+    - unnecessary_breaks
+    - unnecessary_lambdas
+    - unnecessary_null_checks
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - unreachable_from_main
+    - use_if_null_to_convert_nulls_to_bools
+    - use_late_for_private_fields_and_variables
+    - use_setters_to_change_properties
+    - use_string_buffers
+    - use_super_parameters
+    - use_to_and_as_if_applicable

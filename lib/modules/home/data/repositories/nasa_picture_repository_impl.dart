@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:nasa_picture/modules/home/data/datasources/nasa_picture_datasource.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
-import 'package:nasa_picture/modules/home/domain/repositories/nasa_picture_repository.dart';
+
+import '../../domain/entities/nasa_picture_entity.dart';
+import '../../domain/repositories/nasa_picture_repository.dart';
+import '../datasources/nasa_picture_datasource.dart';
 
 class NasaPictureRepositoryImpl implements NasaPictureRepository {
   final NasaPictureDataSource dataSource;

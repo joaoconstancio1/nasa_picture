@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
+import '../../domain/entities/nasa_picture_entity.dart';
 
 class NasaPictureCard extends StatelessWidget {
   final NasaPictureEntity nasaPicture;
@@ -11,16 +11,16 @@ class NasaPictureCard extends StatelessWidget {
     required this.nasaPicture,
     required this.index,
     required this.resetSearch,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     const double borderRadius = 10.0;
 
     return GestureDetector(
-      onTap: () {
-        Modular.to.pushNamed('details', arguments: nasaPicture);
+      onTap: () async {
+        await Modular.to.pushNamed('details', arguments: nasaPicture);
         resetSearch();
       },
       child: Card(

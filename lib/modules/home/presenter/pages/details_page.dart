@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
+import '../../domain/entities/nasa_picture_entity.dart';
 
 class DetailsPage extends StatelessWidget {
-  const DetailsPage({super.key, required this.entity});
+  const DetailsPage({required this.entity, super.key});
 
   final NasaPictureEntity entity;
 
@@ -40,8 +40,7 @@ class DetailsPage extends StatelessWidget {
                           padding: EdgeInsets.all(8.0),
                           child: CircularProgressIndicator(),
                         ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ],
                   ),

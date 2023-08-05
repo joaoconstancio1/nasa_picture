@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:nasa_picture/modules/home/presenter/stores/nasa_picture_states.dart';
-import 'package:nasa_picture/modules/home/domain/entities/nasa_picture_entity.dart';
-import 'package:nasa_picture/modules/home/domain/usecases/nasa_picture_usecase.dart';
+
+import '../../domain/entities/nasa_picture_entity.dart';
+import '../../domain/usecases/nasa_picture_usecase.dart';
+import 'nasa_picture_states.dart';
 
 class NasaPictureStore extends Store<NasaPictureState> {
   final NasaPictureUsecase usecase;
@@ -31,8 +32,8 @@ class NasaPictureStore extends Store<NasaPictureState> {
     if (currentState is NasaPictureSuccessState) {
       filteredNasaPictures = currentState.entity
           .where((picture) =>
-              picture.title?.toLowerCase().contains(query.toLowerCase()) == true ||
-              picture.date?.toLowerCase().contains(query.toLowerCase()) == true)
+              (picture.title?.toLowerCase().contains(query.toLowerCase()) ?? false) ||
+              (picture.date?.toLowerCase().contains(query.toLowerCase()) ?? false))
           .toList();
     }
   }
@@ -41,21 +42,21 @@ class NasaPictureStore extends Store<NasaPictureState> {
     filterNasaPictures(searchController.text);
   }
 
-  void loadMore() {
+  Future<void> loadMore() async {
     currentPage++;
     getData();
-    resetSearch();
+    await resetSearch();
   }
 
-  void resetSearch() {
+  Future<void> resetSearch() async {
     searchController.text = '';
     filteredNasaPictures = [];
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    await SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
   Future<void> handleRefresh() async {
     currentPage = 1;
     getData();
-    resetSearch();
+    await resetSearch();
   }
 }
